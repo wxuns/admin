@@ -18,7 +18,6 @@ import '@/assets/css/reset.css'
 import 'nprogress/nprogress.css'
 import 'animate.css'
 import 'layui-src/src/css/layui.css'
-
 import DropdownPlugin from './m/dropdown'
 import NavbarPlugin from './m/navbar'
 import ContextMenuPlugin from './m/context-menu'
@@ -35,6 +34,7 @@ import MBackTop from '@/m/back-top'
 import MLoader from '@/m/loader'
 import MContainer from '@/m/container'
 import VueSlideoutPanel from 'vue2-slideout-panel'
+import './utils/directives'
 
 Vue.use(VueSlideoutPanel)
 Vue.use(ElementUI)

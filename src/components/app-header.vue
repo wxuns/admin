@@ -35,7 +35,7 @@
 
     <m-nav-item padding="0">
       <m-dropdown align="right" padding="0 10px">
-        <a href="#"  style="padding:0 0px; color: inherit" @click.prevent="todo">
+        <a href="javascript:;"  style="padding:0 0px; color: inherit" @click="dialogVisible = true">
           <i class="fa layui-icon layui-icon-note"></i>
         </a>
       </m-dropdown>
@@ -90,8 +90,13 @@
       </m-dropdown>
     </m-nav-item>
   </m-nav>
-  <el-dialog>
-
+  <el-dialog
+    title="便签" top="5vh"
+    :visible.sync="dialogVisible" :close-on-click-modal="false"
+    width="18%" :modal="false" :close-on-press-escape="true"
+    :modal-append-to-body='false' v-dialogDrag>
+    <textarea class="wx-textarea" rows="10" resize="true" @input="textInp" v-model="textVal">
+    </textarea>
   </el-dialog>
 </m-navbar>
 
@@ -113,7 +118,8 @@ export default {
       themeType: '',
       showAside: true,
       theme: {theme: {headerTheme: 'info'}},
-      dialogVisible: false
+      dialogVisible: false,
+      textVal: localStorage.getItem('note') ? localStorage.getItem('note') : '只用于本地零时存放~'
     }
   },
   computed: {
@@ -147,12 +153,8 @@ export default {
       console.log('change')
       this.$emit('hide-side')
     },
-    todo (done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
+    textInp () {
+      localStorage.setItem('note', this.textVal)
     }
   },
   created () {
@@ -176,5 +178,26 @@ export default {
   .wxuns-dot{
     margin-left:-9px;
     margin-bottom: 6px;
+  }
+  .el-dialog__header{
+    padding:0px 15px;
+    background-color: #20222A;
+  }
+  .el-dialog__title{
+    color: #fff;
+    font-size: 15px;
+  }
+  .el-dialog__body{
+    padding: 0;
+  }
+  .el-dialog{
+    left: 27%;
+  }
+  .wx-textarea{
+    width: 100%;
+    border: 0;
+    padding: 10px;
+    display: block;
+    box-sizing: border-box;
   }
 </style>
