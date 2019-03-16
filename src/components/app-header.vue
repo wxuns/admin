@@ -90,7 +90,7 @@
       </m-dropdown>
     </m-nav-item>
   </m-nav>
-  <el-dialog
+  <el-dialog class="wx-dialog"
     title="便签" top="5vh"
     :visible.sync="dialogVisible" :close-on-click-modal="false"
     width="18%" :modal="false" :close-on-press-escape="true"
@@ -179,18 +179,18 @@ export default {
     margin-left:-9px;
     margin-bottom: 6px;
   }
-  .el-dialog__header{
+  .wx-dialog .el-dialog__header{
     padding:0px 15px;
     background-color: #20222A;
   }
-  .el-dialog__title{
+  .wx-dialog .el-dialog__title{
     color: #fff;
     font-size: 15px;
   }
-  .el-dialog__body{
+  .wx-dialog .el-dialog__body{
     padding: 0;
   }
-  .el-dialog{
+  .wx-dialog .el-dialog{
     left: 27%;
   }
   .wx-textarea{
