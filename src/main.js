@@ -60,7 +60,6 @@ router.beforeEach((to, from, next) => {
   NProgress.start()
   var token = sessionStorage.getItem('token')
   if (!token && whiteList.indexOf(to.name) === -1) {
-    app && app.$message.warning('未授权，请登陆授权后继续')
     NProgress.done()
     return next({name: 'login'})
   }
@@ -75,7 +74,8 @@ router.afterEach(transition => {
 
 
 window.APP_INFO = process.env.APP_INFO
-
+// 全局的默认值
+Axios.defaults.baseURL = 'http://localhost/api'
 // status < 500 不会抛错误
 Axios.defaults.validateStatus = status => {
   return status < 500
