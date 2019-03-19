@@ -153,6 +153,11 @@ export default {
       console.log(231)
     }
   },
+  created () {
+    let now = new Date()
+    let hour = now.getHours()
+    if (hour < 6) { this.welcome = '凌晨好！' } else if (hour < 9) { this.welcome = '早上好！' } else if (hour < 12) { this.welcome = '上午好！' } else if (hour < 14) { this.welcome = '中午好！' } else if (hour < 17) { this.welcome = '下午好！' } else if (hour < 19) { this.welcome = '傍晚好！' } else if (hour < 22) { this.welcome = '晚上好！' } else { this.welcome = '夜里好！' }
+  },
   mounted () {
     this.viewline()
     window.onresize = this.pageview.resize
@@ -202,7 +207,7 @@ export default {
         num: 22,
         link: ''
       } ],
-      welcome: '中午好',
+      welcome: '',
       pageview: '',
       dialogTodoVisible: false,
       form: {
