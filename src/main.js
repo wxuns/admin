@@ -35,7 +35,9 @@ import MLoader from '@/m/loader'
 import MContainer from '@/m/container'
 import VueSlideoutPanel from 'vue2-slideout-panel'
 import './utils/directives'
+import VueCookies from 'vue-cookies'
 
+Vue.use(VueCookies)
 Vue.use(VueSlideoutPanel)
 Vue.use(ElementUI)
 Vue.use(DropdownPlugin)
