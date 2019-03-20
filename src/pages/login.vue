@@ -28,6 +28,8 @@
 </template>
 <script>
 import {mapActions} from 'vuex'
+import Axios from 'axios'
+import Qs from 'qs'
 export default {
   name: 'login',
   data () {
@@ -43,6 +45,15 @@ export default {
   methods: {
     ...mapActions(['login']),
     handleLogin () {
+      var url = this.HOST + '/signup'
+      Axios.put(url, Qs.stringify({
+        username: this.username,
+        password: this.password
+      })).then(function (response) {
+        console.log(response)
+      }).catch(function (error) {
+        console.log(error)
+      })
       if (!this.username || !this.password) {
         return this.$message.warning('用户名和密码不能为空')
       }
@@ -52,7 +63,7 @@ export default {
         password: this.password
       }).then(res => {
         this.$message.success('登录成功')
-        this.$router.push({name: 'home'})
+        // this.$router.push({name: 'home'})
         this.isLoging = false
       })
     }

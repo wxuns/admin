@@ -56,6 +56,7 @@ Vue.use(MBackTop)
 Vue.use(MLoader)
 Vue.use(MContainer)
 Vue.use(Echars)
+
 Vue.prototype.$echarts = Echars
 var whiteList = ['demo', 'login']
 router.beforeEach((to, from, next) => {
@@ -77,11 +78,13 @@ router.afterEach(transition => {
 
 window.APP_INFO = process.env.APP_INFO
 // 全局的默认值
-Axios.defaults.baseURL = 'http://localhost/api'
+// Axios.defaults.baseURL = 'http://api.wxuns.cn'
 // status < 500 不会抛错误
 Axios.defaults.validateStatus = status => {
   return status < 500
 }
+
+Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // 设置请求token
 Axios.interceptors.request.use(config => {
   var token = sessionStorage.getItem('token')
@@ -116,7 +119,8 @@ Axios.interceptors.response.use(res => {
 
 Vue.prototype.$http = Axios
 Vue.http = Axios
-
+Vue.prototype.$axios = Axios
+Vue.prototype.HOST = '/api'
 
 Vue.config.productionTip = false
 
