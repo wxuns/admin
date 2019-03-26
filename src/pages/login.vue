@@ -45,8 +45,11 @@ export default {
   methods: {
     ...mapActions(['login']),
     handleLogin () {
+      if (!this.username || !this.password) {
+        return this.$message.warning('用户名和密码不能为空')
+      }
       var url = this.HOST + '/signup'
-      Axios.put(url, Qs.stringify({
+      Axios.post(url, Qs.stringify({
         username: this.username,
         password: this.password
       })).then(function (response) {
@@ -54,9 +57,6 @@ export default {
       }).catch(function (error) {
         console.log(error)
       })
-      if (!this.username || !this.password) {
-        return this.$message.warning('用户名和密码不能为空')
-      }
       this.isLoging = true
       this.login({
         username: this.username,
