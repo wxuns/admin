@@ -125,7 +125,7 @@
                 <el-col class="line" :span="2" style="text-align: center;">-</el-col>
                 <el-col :span="11">
                   <el-form-item prop="date2">
-                    <el-time-select type="fixed-time" placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-select>
+                    <el-time-select placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-select>
                   </el-form-item>
                 </el-col>
             </el-form-item>
