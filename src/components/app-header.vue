@@ -68,8 +68,8 @@
     <m-nav-item padding="0">
       <m-dropdown align="right" v-if="user" padding="0 10px">
         <a href="#" style="display: inline-block; padding: 0px; color: inherit">
-          <img src="../assets/user.jpg" alt="" style="border-radius: 3px;vertical-align: middle;">
-          <span>{{user.username}}</span>
+          <img :src="user.pic" alt="" style="width:40px;border-radius: 3px;vertical-align: middle;">
+          <span>{{user.nick}}</span>
           <span class="caret"></span>
         </a>
         <m-dropdown-panel>

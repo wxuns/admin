@@ -112,23 +112,27 @@
         </el-col>
     </el-row>
     <el-dialog :visible.sync="dialogTodoVisible" width="26%">
-        <el-form ref="form" :model="form" label-width="50px">
-            <el-form-item label="Todo">
-                <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-form ref="form" status-icon :model="form" label-width="50px" :rules="rules">
+            <el-form-item label="Todo" prop="content">
+                <el-input type="textarea" v-model="form.content"></el-input>
             </el-form-item>
             <el-form-item label="日期" style="margin-bottom:0">
                 <el-col :span="11">
+                  <el-form-item prop="date1">
                     <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                  </el-form-item>
                 </el-col>
-                <el-col class="line" :span="2">-</el-col>
+                <el-col class="line" :span="2" style="text-align: center;">-</el-col>
                 <el-col :span="11">
-                    <el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
+                  <el-form-item prop="date2">
+                    <el-time-select type="fixed-time" placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-select>
+                  </el-form-item>
                 </el-col>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogTodoVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogTodoVisible = false">确 定</el-button>
+            <el-button type="primary" @click="AddTodo('form')">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -149,20 +153,48 @@ export default {
       this.pageview = this.$echarts.init(document.getElementById('echars'))
       this.pageview.setOption(this.option)
     },
-    AddTodo () {
-      console.log(231)
+    AddTodo (form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          this.form.date1 = this.form.date1.getFullYear() + '-' + (this.form.date1.getMonth() + 1) + '-' + this.form.date1.getDate()
+          console.log(this.form)
+        } else {
+          return false
+        }
+      })
     }
   },
   created () {
     let now = new Date()
     let hour = now.getHours()
-    if (hour < 6) { this.welcome = '凌晨好！' } else if (hour < 9) { this.welcome = '早上好！' } else if (hour < 12) { this.welcome = '上午好！' } else if (hour < 14) { this.welcome = '中午好！' } else if (hour < 17) { this.welcome = '下午好！' } else if (hour < 19) { this.welcome = '傍晚好！' } else if (hour < 22) { this.welcome = '晚上好！' } else { this.welcome = '夜里好！' }
+    if (hour < 6) { this.welcome = '凌晨好！' } else if (hour < 9) { this.welcome = '早上好！' } else if (hour < 12) { this.welcome = '上午好！' } else if (hour < 14) { this.welcome = '中午好！' } else if (hour < 17) { this.welcome = '下午好！' } else if (hour < 19) { this.welcome = '傍晚好！' } else if (hour < 22) { this.welcome = '晚上好！' } else { this.welcome = '晚安，明天加油！' }
   },
   mounted () {
     this.viewline()
     window.onresize = this.pageview.resize
   },
   data () {
+    var content = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('内容不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var date1 = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('日期不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var date2 = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('时间不能为空'))
+      } else {
+        callback()
+      }
+    }
     return {
       tableData: [{
         id: '100',
@@ -211,14 +243,20 @@ export default {
       pageview: '',
       dialogTodoVisible: false,
       form: {
-        name: '',
-        region: '',
+        content: '',
         date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        date2: ''
+      },
+      rules: {
+        content: [
+          { validator: content, trigger: 'blur' }
+        ],
+        date1: [
+          { validator: date1, trigger: 'blur' }
+        ],
+        date2: [
+          { validator: date2, trigger: 'blur' }
+        ]
       },
       option: {
         xAxis: {
@@ -254,7 +292,7 @@ export default {
       font-size: 25.9px;
       color: #009688;
     }
-  .wx-chars{
-    height: 300px;
-  }
+    .wx-chars{
+      height: 300px;
+    }
 </style>

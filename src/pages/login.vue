@@ -36,6 +36,7 @@ export default {
     return {
       username: '',
       password: '',
+      user: {},
       isLoging: false,
       author: window.APP_INFO.author,
       version: window.APP_INFO.version,
@@ -45,26 +46,22 @@ export default {
   methods: {
     ...mapActions(['login']),
     handleLogin () {
+      if (!this.username || !this.password) {
+        return this.$message.warning('用户名和密码不能为空')
+      }
       var url = this.HOST + '/signup'
       Axios.put(url, Qs.stringify({
         username: this.username,
         password: this.password
-      })).then(function (response) {
-        console.log(response)
-      }).catch(function (error) {
+      })).then((response) => {
+        this.isLoging = true
+        this.login(response).then(res => {
+          this.$message.success('登录成功')
+          this.$router.push({name: 'home'})
+          this.isLoging = false
+        })
+      }).catch((error) => {
         console.log(error)
-      })
-      if (!this.username || !this.password) {
-        return this.$message.warning('用户名和密码不能为空')
-      }
-      this.isLoging = true
-      this.login({
-        username: this.username,
-        password: this.password
-      }).then(res => {
-        this.$message.success('登录成功')
-        // this.$router.push({name: 'home'})
-        this.isLoging = false
       })
     }
   }
