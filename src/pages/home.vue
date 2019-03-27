@@ -83,13 +83,12 @@
                                     width="115">
                                 <template slot-scope="scope">
                                     <i class="el-icon-time"></i>
-                                    <span style="margin-left: 2px">{{ scope.row.date }}</span>
+                                    <span style="margin-left: 2px">{{ scope.row.time }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                    prop="title"
-                                    label="标题"
-                                    >
+                                    prop="content"
+                                    label="内容">
                             </el-table-column>
                             <el-table-column
                                     fixed="right"
@@ -145,11 +144,17 @@ import Axios from 'axios'
 import Qs from 'qs'
 export default {
   name: 'home',
+  computed: {
+    ...mapState({
+      user: ({user}) => user.user
+    })
+  },
   methods: {
     handleEdit (index, row) {
       console.log(index, row)
     },
     handleDelete (index, row) {
+      this.tableData.splice(index)
       console.log(index, row)
     },
     viewline () {
@@ -164,7 +169,8 @@ export default {
           this.form.token = this.user.token
           var url = this.HOST + '/addtodo'
           Axios.put(url, Qs.stringify(this.form)).then(response => {
-            if (response.status === 'success') {
+            if (!response.errorcode) {
+              this.tableData.push(response)
               this.dialogTodoVisible = false
               this.$refs[form].resetFields()
             }
@@ -177,20 +183,17 @@ export default {
       })
     },
     GetTodo () {
-      var url = this.HOST + '/todo?token=' + this.user.token
+      var url = this.HOST + '/todo?token=' + sessionStorage.getItem('token')
       Axios.get(url).then(response => {
-        if (response.status === 'success') {
+        if (response.errorcode === '4001') {
           console.log(32112)
+        } else {
+          this.tableData = response
         }
       }).catch(error => {
         console.log(error)
       })
     }
-  },
-  computed: {
-    ...mapState({
-      user: ({user}) => user.user
-    })
   },
   created () {
     let now = new Date()
@@ -201,19 +204,6 @@ export default {
     this.viewline()
     window.onresize = this.pageview.resize
     this.GetTodo()
-    this.tableData = [{
-      id: '100',
-      date: '2019.01.01',
-      title: '为违法犯罪活动提供借款'
-    }, {
-      id: '300',
-      date: '2019.01.02',
-      title: '上海市普陀区金沙江路 1518 弄'
-    }, {
-      id: '120',
-      date: '2019.01.03',
-      title: '为当前遍历的元素提供别名'
-    }]
   },
   data () {
     var content = (rule, value, callback) => {
