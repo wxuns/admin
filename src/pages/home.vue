@@ -140,6 +140,9 @@
 
 </template>
 <script type="text/javascript">
+import {mapActions, mapState} from 'vuex'
+import Axios from 'axios'
+import Qs from 'qs'
 export default {
   name: 'home',
   methods: {
@@ -157,12 +160,37 @@ export default {
       this.$refs[form].validate((valid) => {
         if (valid) {
           this.form.date1 = this.form.date1.getFullYear() + '-' + (this.form.date1.getMonth() + 1) + '-' + this.form.date1.getDate()
-          console.log(this.form)
+          this.form.time = this.form.date1 + ' ' + this.form.date2
+          this.form.token = this.user.token
+          var url = this.HOST + '/addtodo'
+          Axios.put(url, Qs.stringify(this.form)).then(response => {
+            if (response.status === 'success') {
+              this.dialogTodoVisible = false
+              this.$refs[form].resetFields()
+            }
+          }).catch(error => {
+            console.log(error)
+          })
         } else {
           return false
         }
       })
+    },
+    GetTodo () {
+      var url = this.HOST + '/todo?token=' + this.user.token
+      Axios.get(url).then(response => {
+        if (response.status === 'success') {
+          console.log(32112)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     }
+  },
+  computed: {
+    ...mapState({
+      user: ({user}) => user.user
+    })
   },
   created () {
     let now = new Date()
@@ -172,6 +200,20 @@ export default {
   mounted () {
     this.viewline()
     window.onresize = this.pageview.resize
+    this.GetTodo()
+    this.tableData = [{
+      id: '100',
+      date: '2019.01.01',
+      title: '为违法犯罪活动提供借款'
+    }, {
+      id: '300',
+      date: '2019.01.02',
+      title: '上海市普陀区金沙江路 1518 弄'
+    }, {
+      id: '120',
+      date: '2019.01.03',
+      title: '为当前遍历的元素提供别名'
+    }]
   },
   data () {
     var content = (rule, value, callback) => {
@@ -196,19 +238,7 @@ export default {
       }
     }
     return {
-      tableData: [{
-        id: '100',
-        date: '2019.01.01',
-        title: '为违法犯罪活动提供借款'
-      }, {
-        id: '300',
-        date: '2019.01.02',
-        title: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: '120',
-        date: '2019.01.03',
-        title: '为当前遍历的元素提供别名'
-      }],
+      tableData: [],
       quickData: [{
         icon: 'fa fa-edit',
         tag: '写文章',
@@ -245,7 +275,9 @@ export default {
       form: {
         content: '',
         date1: '',
-        date2: ''
+        date2: '',
+        time: '',
+        token: ''
       },
       rules: {
         content: [
