@@ -154,8 +154,18 @@ export default {
       console.log(index, row)
     },
     handleDelete (index, row) {
-      this.tableData.splice(index)
-      console.log(index, row)
+      console.log(row)
+      var url = this.HOST + '/deltodo/' + row.id
+      Axios.put(url, Qs.stringify({user_id: row.user_id,token: this.user.token})).then(response => {
+        // console.log(response)
+        // if (!response.errorcode) {
+        //   this.tableData.push(response)
+        //   this.dialogTodoVisible = false
+        // }
+      }).catch(error => {
+        console.log(error)
+      })
+      this.tableData.splice(index, 1)
     },
     viewline () {
       this.pageview = this.$echarts.init(document.getElementById('echars'))
