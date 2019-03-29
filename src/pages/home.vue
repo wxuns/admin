@@ -134,6 +134,31 @@
             <el-button type="primary" @click="AddTodo('form')">确 定</el-button>
         </div>
     </el-dialog>
+
+    <el-dialog :visible.sync="dialogEditTodo" width="26%">
+      <el-form ref="form" status-icon :model="form" label-width="50px" :rules="rules">
+        <el-form-item label="Todo" prop="content">
+          <el-input type="textarea" v-model="form.content"></el-input>
+        </el-form-item>
+        <el-form-item label="日期" style="margin-bottom:0">
+          <el-col :span="11">
+            <el-form-item prop="date1">
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col class="line" :span="2" style="text-align: center;">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="date2">
+              <el-time-select placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-select>
+            </el-form-item>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogEditTodo = false">取 消</el-button>
+        <el-button type="primary" @click="EditTodo('form')">确 定</el-button>
+      </div>
+    </el-dialog>
 </div>
 
 
@@ -151,21 +176,28 @@ export default {
   },
   methods: {
     handleEdit (index, row) {
-      console.log(index, row)
+      var time = row.time.split(' ')
+      console.log(row)
+      this.dialogEditTodo = true
+      this.form = {
+        content: row.content,
+        date1: time[0],
+        date2: time[1],
+        id: row.id
+      }
     },
     handleDelete (index, row) {
-      console.log(row)
       var url = this.HOST + '/deltodo/' + row.id
-      Axios.put(url, Qs.stringify({user_id: row.user_id,token: this.user.token})).then(response => {
-        // console.log(response)
-        // if (!response.errorcode) {
-        //   this.tableData.push(response)
-        //   this.dialogTodoVisible = false
-        // }
+      Axios.put(url, Qs.stringify({user_id: row.user_id, token: this.user.token})).then(response => {
+        if (!response.errorcode) {
+          this.tableData.splice(index, 1)
+          this.$message.success('又一项任务完成了')
+        } else {
+          this.$message.error('出错了')
+        }
       }).catch(error => {
         console.log(error)
       })
-      this.tableData.splice(index, 1)
     },
     viewline () {
       this.pageview = this.$echarts.init(document.getElementById('echars'))
@@ -182,6 +214,7 @@ export default {
             if (!response.errorcode) {
               this.tableData.push(response)
               this.dialogTodoVisible = false
+              this.$message.success('任务添加成功')
               this.$refs[form].resetFields()
             }
           }).catch(error => {
@@ -196,12 +229,33 @@ export default {
       var url = this.HOST + '/todo?token=' + sessionStorage.getItem('token')
       Axios.get(url).then(response => {
         if (response.errorcode === '4001') {
-          console.log(32112)
+          this.$message.error('出错了')
         } else {
           this.tableData = response
         }
       }).catch(error => {
         console.log(error)
+      })
+    },
+    EditTodo (form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          this.form.time = this.form.date1 + ' ' + this.form.date2
+          this.form.token = this.user.token
+          var url = this.HOST + '/edittodo/' + this.form.id
+          Axios.put(url, Qs.stringify(this.form)).then(response => {
+            if (!response.errorcode) {
+              this.tableData.push(response)
+              this.dialogTodoVisible = false
+              this.$message.success('任务添加成功')
+              this.$refs[form].resetFields()
+            }
+          }).catch(error => {
+            console.log(error)
+          })
+        } else {
+          return false
+        }
       })
     }
   },
@@ -272,6 +326,7 @@ export default {
       welcome: '',
       pageview: '',
       dialogTodoVisible: false,
+      dialogEditTodo: false,
       form: {
         content: '',
         date1: '',
