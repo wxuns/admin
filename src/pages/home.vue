@@ -155,7 +155,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogEditTodo = false">取 消</el-button>
+        <el-button @click="resetForm('form')">取 消</el-button>
         <el-button type="primary" @click="EditTodo('form')">确 定</el-button>
       </div>
     </el-dialog>
@@ -176,8 +176,8 @@ export default {
   },
   methods: {
     handleEdit (index, row) {
+      this.index = index
       var time = row.time.split(' ')
-      console.log(row)
       this.dialogEditTodo = true
       this.form = {
         content: row.content,
@@ -198,6 +198,10 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    resetForm (form) {
+      this.dialogEditTodo = false
+      this.form = {}
     },
     viewline () {
       this.pageview = this.$echarts.init(document.getElementById('echars'))
@@ -240,14 +244,19 @@ export default {
     EditTodo (form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
+          if (!this.form.date1.length) {
+            this.form.date1 = this.form.date1.getFullYear() + '-' + (this.form.date1.getMonth() + 1) + '-' + this.form.date1.getDate()
+          }
           this.form.time = this.form.date1 + ' ' + this.form.date2
           this.form.token = this.user.token
           var url = this.HOST + '/edittodo/' + this.form.id
           Axios.put(url, Qs.stringify(this.form)).then(response => {
             if (!response.errorcode) {
-              this.tableData.push(response)
-              this.dialogTodoVisible = false
-              this.$message.success('任务添加成功')
+              this.tableData[this.index].content = this.form.content
+              this.tableData[this.index].date1 = this.form.date1
+              this.tableData[this.index].date2 = this.form.date2
+              this.dialogEditTodo = false
+              this.$message.success('任务修改成功')
               this.$refs[form].resetFields()
             }
           }).catch(error => {
@@ -327,13 +336,8 @@ export default {
       pageview: '',
       dialogTodoVisible: false,
       dialogEditTodo: false,
-      form: {
-        content: '',
-        date1: '',
-        date2: '',
-        time: '',
-        token: ''
-      },
+      form: {},
+      index: '',
       rules: {
         content: [
           { validator: content, trigger: 'blur' }

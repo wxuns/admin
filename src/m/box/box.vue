@@ -14,7 +14,7 @@ export default {
     border-radius: 3px;
     padding: 15px;
     margin: 0 auto;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
   .m-box:last-child{
     margin-bottom: 0;

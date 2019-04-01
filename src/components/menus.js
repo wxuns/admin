@@ -11,7 +11,8 @@ const menus = [
       },
       {
         id: 'columnlist',
-        label: '栏目列表'
+        label: '栏目列表',
+        name: 'columnlist'
       },
       {
         id: 'comment',
