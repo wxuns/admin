@@ -11,13 +11,17 @@
   <m-box>
     <el-row :gutter="20">
       <el-col :span="4">
-        <div class="grid-content bg-purple" v-if="!buttonshow">
-          <el-button type="warning" icon="el-icon-edit" @click="buttonshow = true">添加</el-button>
-          <el-button type="primary" icon="el-icon-search" @click="buttonshow = true">搜索</el-button>
+        <div class="grid-content bg-purple">
+          <el-button type="warning" icon="el-icon-edit">添加</el-button>
         </div>
-        <el-form :inline="true" :model="formSeach" class="demo-form-inline" v-if="buttonshow">
-          <el-input placeholder="请输入..."></el-input>
-        </el-form>
+      </el-col>
+      <el-col :span="16" style="float: right;text-align: right">
+        <div class="grid-content bg-purple">
+          <el-button type="primary" icon="el-icon-search" v-if="!buttonshow" @click="buttonshow = true">搜索</el-button>
+          <el-form :inline="true" :model="formSeach" style="float: right;width: 200px" v-if="buttonshow">
+            <el-input placeholder="请输入..."></el-input>
+          </el-form>
+        </div>
       </el-col>
     </el-row>
   </m-box>
