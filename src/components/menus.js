@@ -88,7 +88,8 @@ const menus = [
       },
       {
         id: 'role',
-        label: '角色管理'
+        label: '角色管理',
+        name: 'role'
       }
     ]
   },

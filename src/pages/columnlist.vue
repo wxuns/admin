@@ -48,7 +48,7 @@
 
       <el-table-column prop="classname" label="权限" width="100">
         <template slot-scope="scope">
-          <el-tag size="medium" type="warning">{{ scope.row.classname }}</el-tag>
+          <el-tag size="medium" type="warning">{{ scope.row.rolename }}</el-tag>
         </template>
       </el-table-column>
 
@@ -81,25 +81,29 @@
             time: '2016-05-02',
             classname: '技术文章',
             itro: '上海市普陀区金沙江路 1518 弄',
-            status: true
+            status: true,
+            rolename: '管理员'
           }, {
             id: 2,
             time: '2016-05-02',
             classname: '影视内容',
             itro: '上海市普陀区金沙江路 1518 弄',
-            status: true
+            status: true,
+            rolename: '用户'
           }, {
             id: 3,
             time: '2016-05-02',
             classname: '闲话少说',
             itro: '上海市普陀区金沙江路 1518 弄',
-            status: false
+            status: false,
+            rolename: '管理员'
           }, {
             id: 4,
             time: '2016-05-02',
             classname: '我的小店',
             itro: '上海市普陀区金沙江路 1518 弄',
-            status: true
+            status: true,
+            rolename: '管理员'
           }]
         }
       },
