@@ -258,6 +258,7 @@ export default {
               this.dialogEditTodo = false
               this.$message.success('任务修改成功')
               this.$refs[form].resetFields()
+              this.form = {}
             }
           }).catch(error => {
             console.log(error)

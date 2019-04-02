@@ -27,7 +27,44 @@
   </m-box>
 
   <m-box>
-    21321
+    <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
+      <el-table-column prop="time" label="日期" width="180">
+      </el-table-column>
+
+      <el-table-column prop="classname" label="栏目" width="180" align="center">
+      </el-table-column>
+
+      <el-table-column prop="itro" label="简介">
+      </el-table-column>
+      <el-table-column prop="classname" label="状态" width="60" align="center">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="classname" label="权限" width="100">
+        <template slot-scope="scope">
+          <el-tag size="medium" type="warning">{{ scope.row.classname }}</el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="操作" width="180">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
   </m-box>
 </div>
 </template>
@@ -38,12 +75,39 @@
       data () {
         return {
           formSeach: {},
-          buttonshow: false
+          buttonshow: false,
+          tableData: [{
+            id: 1,
+            time: '2016-05-02',
+            classname: '技术文章',
+            itro: '上海市普陀区金沙江路 1518 弄',
+            status: true
+          }, {
+            id: 2,
+            time: '2016-05-02',
+            classname: '影视内容',
+            itro: '上海市普陀区金沙江路 1518 弄',
+            status: true
+          }, {
+            id: 3,
+            time: '2016-05-02',
+            classname: '闲话少说',
+            itro: '上海市普陀区金沙江路 1518 弄',
+            status: false
+          }, {
+            id: 4,
+            time: '2016-05-02',
+            classname: '我的小店',
+            itro: '上海市普陀区金沙江路 1518 弄',
+            status: true
+          }]
         }
+      },
+      methods: {
       }
     }
 </script>
 
-<style scoped>
-
+<style>
+  .el-icon{top: 33% !important;}
 </style>
