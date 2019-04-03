@@ -10,7 +10,7 @@
 
   <m-box>
     <el-row :gutter="20">
-      <el-col :span="4">
+      <el-col :span="4" style="white-space: nowrap">
         <div class="grid-content bg-purple">
           <el-button type="danger" icon="el-icon-delete" size="small">删除</el-button>
           <el-button type="warning" icon="el-icon-edit" size="small" @click="dialogadd = true">添加</el-button>
@@ -21,7 +21,6 @@
 
   <m-box>
     <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
-
       <el-table-column type="selection" width="45">
       </el-table-column>
       <el-table-column
@@ -57,107 +56,103 @@
     </el-table>
 
   </m-box>
-  <el-dialog title="添加角色" :visible.sync="dialogadd" width="30%" top="6%">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="角色名" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
+  <el-dialog title="添加角色" :visible.sync="dialogadd" width="500px" top="6%">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px">
+      <el-form-item label="角色名" prop="rolename">
+        <el-input v-model="ruleForm.rolename"></el-input>
       </el-form-item>
-      <el-form-item label="权限范围" prop="type">
-        <el-checkbox-group v-model="ruleForm.type">
+      <el-form-item label="权限范围" prop="range">
+        <el-checkbox-group v-model="ruleForm.range">
           <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
           <el-checkbox label="地推活动" name="type"></el-checkbox>
           <el-checkbox label="线下主题活动" name="type"></el-checkbox>
           <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item label="介绍" prop="desc">
-        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+      <el-form-item label="介绍" prop="description">
+        <el-input type="textarea" v-model="ruleForm.description"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogadd = false">取 消</el-button>
-    <el-button type="primary" @click="dialogadd = false">确 定</el-button>
+    <el-button @click="resetForm('ruleForm')">取 消</el-button>
+    <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
   </span>
   </el-dialog>
 </div>
 </template>
-
 <script>
-    export default {
-      name: 'columnlist',
-      data () {
-        return {
-          formSeach: {},
-          buttonshow: false,
-          tableData: [{
-            id: 1,
-            time: '2016-05-02',
-            classname: '技术文章',
-            description: '上海市普陀区金沙江路 1518 弄',
-            role: '上海市普陀区金沙江路 1518 弄',
-            rolename: '管理员'
-          }, {
-            id: 2,
-            time: '2016-05-02',
-            classname: '影视内容',
-            description: '上海市普陀区金沙江路 1518 弄',
-            role: '上海市普陀区金沙江路 1518 弄',
-            rolename: '用户'
-          }, {
-            id: 3,
-            time: '2016-05-02',
-            classname: '闲话少说',
-            description: '上海市普陀区金沙江路 1518 弄',
-            role: '上海市普陀区金沙江路 1518 弄',
-            rolename: '管理员'
-          }, {
-            id: 4,
-            time: '2016-05-02',
-            classname: '我的小店',
-            description: '上海市普陀区金沙江路 1518 弄',
-            role: '上海市普陀区金沙江路 1518 弄',
-            rolename: '管理员'
-          }],
-          ruleForm: {
-            name: '',
-            region: '',
-            date1: '',
-            date2: '',
-            delivery: false,
-            type: [],
-            resource: '',
-            desc: ''
-          },
-          rules: {
-            name: [
-              { required: true, message: '请输入活动名称', trigger: 'blur' },
-              { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-            ],
-            region: [
-              { required: true, message: '请选择活动区域', trigger: 'change' }
-            ],
-            date1: [
-              { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-            ],
-            date2: [
-              { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-            ],
-            type: [
-              { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-            ],
-            resource: [
-              { required: true, message: '请选择活动资源', trigger: 'change' }
-            ],
-            desc: [
-              { required: true, message: '请填写活动形式', trigger: 'blur' }
-            ]
-          },
-          dialogadd: false
-        }
+  import menus from '@/components/menus'
+  export default {
+    name: 'role',
+    data () {
+      return {
+        formSeach: {},
+        buttonshow: false,
+        tableData: [{
+          id: 1,
+          time: '2016-05-02',
+          classname: '技术文章',
+          description: '上海市普陀区金沙江路 1518 弄',
+          role: '上海市普陀区金沙江路 1518 弄',
+          rolename: '管理员'
+        }, {
+          id: 2,
+          time: '2016-05-02',
+          classname: '影视内容',
+          description: '上海市普陀区金沙江路 1518 弄',
+          role: '上海市普陀区金沙江路 1518 弄',
+          rolename: '用户'
+        }, {
+          id: 3,
+          time: '2016-05-02',
+          classname: '闲话少说',
+          description: '上海市普陀区金沙江路 1518 弄',
+          role: '上海市普陀区金沙江路 1518 弄',
+          rolename: '管理员'
+        }, {
+          id: 4,
+          time: '2016-05-02',
+          classname: '我的小店',
+          description: '上海市普陀区金沙江路 1518 弄',
+          role: '上海市普陀区金沙江路 1518 弄',
+          rolename: '管理员'
+        }],
+        ruleForm: {},
+        rules: {
+          rolename: [
+            { required: true, message: '请输入角色名', trigger: 'blur' },
+            { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
+          ],
+          range: [
+            { type: 'array', required: true, message: '请选择权限范围', trigger: 'change' }
+          ],
+          description: [
+            { required: true, message: '请填写角色介绍', trigger: 'blur' }
+          ]
+        },
+        dialogadd: false
+      }
+    },
+    mounted () {
+      console.log(menus)
+    },
+    methods: {
+      submitForm (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!')
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
-      methods: {
+      resetForm (formName) {
+        this.dialogadd = false
+        this.$refs[formName].resetFields()
       }
     }
+  }
 </script>
 
 <style>

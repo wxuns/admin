@@ -90,6 +90,11 @@ const menus = [
         id: 'role',
         label: '角色管理',
         name: 'role'
+      },
+      {
+        id: 'auth',
+        label: '权限管理',
+        name: 'auth'
       }
     ]
   },

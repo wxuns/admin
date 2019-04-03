@@ -14,7 +14,8 @@
 </template>
 <script type="text/javascript">
 import VMenu from './vmenu'
-import menus from './menus'
+import Axios from 'axios'
+import Qs from 'qs'
 export default {
   props: {
     collapse: Boolean,
@@ -23,9 +24,21 @@ export default {
   components: {
     VMenu
   },
+  mounted () {
+    var url = this.HOST + '/auth'
+    Axios.get(url).then(response => {
+      if (!response.errorcode) {
+        this.menus = response
+      } else {
+        this.$message.error('出错了')
+      }
+    }).catch(error => {
+      console.log(error)
+    })
+  },
   data () {
     return {
-      menus,
+      menus: [],
       defaultActive: 'home',
       test: 'asdfasdf'
     }
