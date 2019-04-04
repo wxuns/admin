@@ -15,7 +15,6 @@
 <script type="text/javascript">
 import VMenu from './vmenu'
 import Axios from 'axios'
-import Qs from 'qs'
 export default {
   props: {
     collapse: Boolean,
@@ -28,6 +27,7 @@ export default {
     var url = this.HOST + '/auth'
     Axios.get(url).then(response => {
       if (!response.errorcode) {
+        sessionStorage.setItem('menus', JSON.stringify(response))
         this.menus = response
       } else {
         this.$message.error('出错了')

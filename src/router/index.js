@@ -18,6 +18,7 @@ export default new Router({
         {path: '/', name: 'home', component: Home},
         {path: '/columnlist', name: 'columnlist', component: page('columnlist')},
         {path: '/role', name: 'role', component: page('role')},
+        {path: '/auth', name: 'auth', component: page('auth')},
         {path: '/button', name: 'c-button', component: page('c-button')},
         {path: '/switch', name: 'c-switch', component: page('c-switch')},
         {path: '/checkbox', name: 'c-checkbox', component: page('c-checkbox')},
