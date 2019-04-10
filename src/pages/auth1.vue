@@ -1,10 +1,10 @@
 <template>
 <div class="page-body">
   <div class="page-header">
-    <h1 class="page-title">角色管理</h1>
+    <h1 class="page-title">权限管理</h1>
     <el-breadcrumb>
       <el-breadcrumb-item :to="{path: '/'}">首页</el-breadcrumb-item>
-      <el-breadcrumb-item >角色管理</el-breadcrumb-item>
+      <el-breadcrumb-item >权限管理</el-breadcrumb-item>
     </el-breadcrumb>
   </div>
 
@@ -20,26 +20,31 @@
   </m-box>
 
   <m-box>
-    <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" lazy border row-key="id">
+    <el-table :data="tablemenus" style="width: 100%;margin-bottom: 20px;" border row-key="id">
       <el-table-column type="selection" width="45">
       </el-table-column>
-      <el-table-column
-              type="index"
-              width="50">
+
+      <el-table-column type="index" width="50">
       </el-table-column>
-      <el-table-column prop="time" label="日期" width="180">
+      <el-table-column label="ID" prop="id">
       </el-table-column>
 
-      <el-table-column prop="rolename" label="角色名" width="100" align="center">
+      <el-table-column prop="label" label="菜单名" align="center">
         <template slot-scope="scope">
-          <el-tag size="medium" type="warning">{{ scope.row.rolename }}</el-tag>
+          <el-tag size="medium" type="warning">{{ scope.row.label }}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column prop="role" label="拥有权限">
+      <el-table-column prop="role" label="图标" width="100" align="center">
+        <template slot-scope="scope">
+          <i :class="scope.row.icon"></i>
+        </template>
       </el-table-column>
 
-      <el-table-column prop="description" label="简介">
+      <el-table-column prop="name" label="名称">
+      </el-table-column>
+
+      <el-table-column prop="path" label="path">
       </el-table-column>
 
       <el-table-column label="操作" width="180">
@@ -81,42 +86,23 @@
 </div>
 </template>
 <script>
-  import menus from '@/components/menus'
   export default {
     name: 'role',
+    mounted () {
+      var menus = this.tablemenus
+      this.tablemenus.forEach(function (value, index) {
+        if (value.submenu) {
+          menus[index].children = menus[index].submenu
+          delete menus[index].submenu
+        }
+      })
+      this.tablemenus = menus
+    },
     data () {
       return {
         formSeach: {},
         buttonshow: false,
-        tableData: [{
-          id: 1,
-          time: '2016-05-02',
-          classname: '技术文章',
-          description: '上海市普陀区金沙江路 1518 弄',
-          role: '上海市普陀区金沙江路 1518 弄',
-          rolename: '管理员'
-        }, {
-          id: 2,
-          time: '2016-05-02',
-          classname: '影视内容',
-          description: '上海市普陀区金沙江路 1518 弄',
-          role: '上海市普陀区金沙江路 1518 弄',
-          rolename: '用户'
-        }, {
-          id: 3,
-          time: '2016-05-02',
-          classname: '闲话少说',
-          description: '上海市普陀区金沙江路 1518 弄',
-          role: '上海市普陀区金沙江路 1518 弄',
-          rolename: '管理员'
-        }, {
-          id: 4,
-          time: '2016-05-02',
-          classname: '我的小店',
-          description: '上海市普陀区金沙江路 1518 弄',
-          role: '上海市普陀区金沙江路 1518 弄',
-          rolename: '管理员'
-        }],
+        tablemenus: JSON.parse(sessionStorage.getItem('menus')),
         ruleForm: {},
         rules: {
           rolename: [
@@ -132,8 +118,6 @@
         },
         dialogadd: false
       }
-    },
-    mounted () {
     },
     methods: {
       submitForm (formName) {

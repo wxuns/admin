@@ -24,17 +24,21 @@ export default {
     VMenu
   },
   mounted () {
-    var url = this.HOST + '/auth'
-    Axios.get(url).then(response => {
-      if (!response.errorcode) {
-        sessionStorage.setItem('menus', JSON.stringify(response))
-        this.menus = response
-      } else {
-        this.$message.error('出错了')
-      }
-    }).catch(error => {
-      console.log(error)
-    })
+    if (localStorage.getItem('menus')) {
+      this.menus = JSON.parse(localStorage.getItem('menus'))
+    } else {
+      var url = this.HOST + '/auth'
+      Axios.get(url).then(response => {
+        if (!response.errorcode) {
+          localStorage.setItem('menus', JSON.stringify(response))
+          this.menus = response
+        } else {
+          this.$message.error('出错了')
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    }
   },
   data () {
     return {
